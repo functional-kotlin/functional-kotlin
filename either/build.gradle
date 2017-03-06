@@ -1,0 +1,15 @@
+dependencies {
+    compile project(':algebra')
+    compile project(':combinator')
+
+    compile kotlinStdLib
+
+    testCompile project(':algebra').sourceSets.test.output
+
+    testCompile jUnit
+    testCompile jUnitQuickCheckCore
+    testCompile jUnitQuickCheckGenerators
+    testCompile truth
+
+    ktlint ktlintDep
+}

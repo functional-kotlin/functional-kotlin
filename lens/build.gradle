@@ -1,0 +1,8 @@
+dependencies {
+    testCompile jUnit
+    testCompile jUnitQuickCheckCore
+    testCompile jUnitQuickCheckGenerators
+    testCompile truth
+
+    ktlint ktlintDep
+}
