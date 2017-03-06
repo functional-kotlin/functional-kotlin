@@ -36,7 +36,7 @@ class EitherProperties {
             @When(satisfies = NOT_NULL) y: Y,
             @When(satisfies = NOT_NULL) z: Z) {
 
-//        ApplyLaws.composition(of<X>(), x, { y }, { z })
+        // ApplyLaws.composition(of<X>(), x, { y }, { z })
     }
 
     // Bind
@@ -47,7 +47,6 @@ class EitherProperties {
 
         BindLaws.associativity(of(), x)
     }
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 

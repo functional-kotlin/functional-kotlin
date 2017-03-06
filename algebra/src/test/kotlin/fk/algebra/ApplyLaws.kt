@@ -1,7 +1,5 @@
 package fk.algebra
 
-import com.google.common.truth.Truth.assertThat
-
 object ApplyLaws {
 
     /**
