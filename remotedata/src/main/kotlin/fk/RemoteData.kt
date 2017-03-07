@@ -98,13 +98,4 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     infix fun getOrElse(f: () -> A): A
             = cata(f, f, { f() }, identity())
 
-    infix fun <B : Any> andMap(wrappedFunction: RemoteData<E, (A) -> B>): RemoteData<E, B> {
-        return when (wrappedFunction) {
-            is NotAsked -> NotAsked()
-            is Loading -> Loading()
-            is Failure -> Failure(wrappedFunction.error)
-            is Success -> map(wrappedFunction.value)
-        }
-    }
-
 }
