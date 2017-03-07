@@ -3,4 +3,6 @@ include ':combinator'
 include ':either'
 include ':lens'
 include ':maybe'
+include ':partial'
+include ':remotedata'
 

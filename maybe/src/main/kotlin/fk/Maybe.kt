@@ -3,12 +3,10 @@ package fk
 import fk.algebra.Apply
 import fk.algebra.Bind
 import fk.algebra.Monad
-import fk.combinator.constant
-import fk.combinator.identity
 
 sealed class Maybe<A : Any> : Monad<A> {
 
-    // Catamorpism
+    // Catamorphism
 
     protected abstract fun <B : Any> Maybe<A>.cata(f: (A) -> B, g: () -> B): B
 
@@ -43,27 +41,29 @@ sealed class Maybe<A : Any> : Monad<A> {
 
     // Apply
 
-    override fun <B : Any> ap(apply: Apply<(A) -> B>): Maybe<B>
-            = ap(apply as? Maybe<(A) -> B> ?: throw IllegalArgumentException("Apply must be Maybe"))
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
+    override fun <B : Any> ap(maybe: Apply<(A) -> B>): Maybe<B>
+            = ap(maybe as? Maybe<(A) -> B> ?: throw IllegalArgumentException("Apply must be Maybe"))
 
     infix fun <B : Any> ap(maybe: Maybe<(A) -> B>): Maybe<B>
             = bind { a -> maybe.map { f -> f(a) } }
 
     // Bind
 
-    override fun <B : Any> bind(f: (A) -> Bind<B>): Bind<B>
-            = bind(f as? (A) -> Maybe<B> ?: throw IllegalArgumentException("Bind must be Maybe"))
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
+    override fun <B : Any> bind(maybe: (A) -> Bind<B>): Bind<B>
+            = bind(maybe as? (A) -> Maybe<B> ?: throw IllegalArgumentException("Bind must be Maybe"))
 
-    infix fun <B : Any> bind(f: (A) -> Maybe<B>): Maybe<B>
-            = cata(f, constant(None<B>()))
+    infix fun <B : Any> bind(maybe: (A) -> Maybe<B>): Maybe<B>
+            = cata(maybe, constant(None<B>()))
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API
 
-    fun <A : Any> Maybe<A>.orElse(value: A): A
+    infix fun orElse(value: A): A
             = cata(identity(), constant(value))
 
-    fun <A : Any> Maybe<A>.getOrElse(f: () -> A): A
+    infix fun getOrElse(f: () -> A): A
             = cata(identity(), f)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////

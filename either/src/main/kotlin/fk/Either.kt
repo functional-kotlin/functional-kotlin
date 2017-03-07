@@ -6,7 +6,7 @@ import fk.algebra.Monad
 
 sealed class Either<B : Any, A : Any> : Monad<A> {
 
-    // Catamorpism
+    // Catamorphism
 
     protected abstract fun <X : Any> cata(f: (B) -> X, g: (A) -> X): X
 
@@ -28,19 +28,21 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     // Apply
 
-    override fun <C : Any> ap(apply: Apply<(A) -> C>): Either<B, C>
-            = ap(apply as? Either<B, (A) -> C> ?: throw IllegalArgumentException("Apply must be Either"))
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
+    override fun <C : Any> ap(either: Apply<(A) -> C>): Either<B, C>
+            = ap(either as? Either<B, (A) -> C> ?: throw IllegalArgumentException("Apply must be Either"))
 
     infix fun <C : Any> ap(either: Either<B, (A) -> C>): Either<B, C>
             = bind { a -> either.map { it(a) } }
 
     // Bind
 
-    override fun <C : Any> bind(f: (A) -> Bind<C>): Bind<C>
-            = bind(f as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Maybe"))
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
+    override fun <C : Any> bind(either: (A) -> Bind<C>): Bind<C>
+            = bind(either as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Either"))
 
-    infix fun <C : Any> bind(f: (A) -> Either<B, C>): Either<B, C>
-            = cata({ Left<B, C>(it) }, f)
+    infix fun <C : Any> bind(either: (A) -> Either<B, C>): Either<B, C>
+            = cata({ Left<B, C>(it) }, either)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API

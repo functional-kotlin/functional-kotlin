@@ -1,3 +1,3 @@
-package fk.combinator
+package fk
 
 fun <A : Any> constant(a: A) = { a }

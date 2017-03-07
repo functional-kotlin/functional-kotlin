@@ -1,4 +1,4 @@
-package fk.lens
+package fk
 
 class PartialLens {
 }
