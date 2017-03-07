@@ -50,9 +50,9 @@ sealed class Maybe<A : Any> : Monad<A> {
 
     // Bind
 
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <B : Any> bind(maybe: (A) -> Bind<B>): Bind<B>
-            = bind(maybe as? (A) -> Maybe<B> ?: throw IllegalArgumentException("Bind must be Maybe"))
+    @Suppress("UNCHECKED_CAST")
+    override fun <B : Any> bind(f: (A) -> Bind<B>): Bind<B>
+            = bind(f as? (A) -> Maybe<B> ?: throw IllegalArgumentException("Bind must be Maybe"))
 
     infix fun <B : Any> bind(maybe: (A) -> Maybe<B>): Maybe<B>
             = cata(maybe, constant(None<B>()))

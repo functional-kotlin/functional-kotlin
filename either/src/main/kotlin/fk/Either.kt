@@ -37,12 +37,12 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     // Bind
 
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <C : Any> bind(either: (A) -> Bind<C>): Bind<C>
-            = bind(either as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Either"))
+    @Suppress("UNCHECKED_CAST")
+    override fun <C : Any> bind(f: (A) -> Bind<C>): Bind<C>
+            = bind(f as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Either"))
 
-    infix fun <C : Any> bind(either: (A) -> Either<B, C>): Either<B, C>
-            = cata({ Left<B, C>(it) }, either)
+    infix fun <C : Any> bind(f: (A) -> Either<B, C>): Either<B, C>
+            = cata({ Left<B, C>(it) }, f)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API
