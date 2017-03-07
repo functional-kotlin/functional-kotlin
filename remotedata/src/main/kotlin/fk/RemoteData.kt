@@ -8,22 +8,50 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
 
     // Catamorphism
 
-    protected abstract fun <B : Any> RemoteData<E, A>.cata(f: (A) -> B, g: () -> B): B
+    protected abstract fun <B : Any> RemoteData<E, A>.cata(
+            notAsked: () -> B,
+            loading: () -> B,
+            failure: (E) -> B,
+            success: (A) -> B): B
 
     class NotAsked<E : Any, A : Any> : RemoteData<E, A>() {
-        override fun <B : Any> RemoteData<E, A>.cata(f: (A) -> B, g: () -> B): B = g()
+
+        override fun <B : Any> RemoteData<E, A>.cata(
+                notAsked: () -> B,
+                loading: () -> B,
+                failure: (E) -> B,
+                success: (A) -> B): B = notAsked()
+
     }
 
     class Loading<E : Any, A : Any> : RemoteData<E, A>() {
-        override fun <B : Any> RemoteData<E, A>.cata(f: (A) -> B, g: () -> B): B = g()
+
+        override fun <B : Any> RemoteData<E, A>.cata(
+                notAsked: () -> B,
+                loading: () -> B,
+                failure: (E) -> B,
+                success: (A) -> B): B = loading()
+
     }
 
     data class Failure<E : Any, A : Any>(val error: E) : RemoteData<E, A>() {
-        override fun <B : Any> RemoteData<E, A>.cata(f: (A) -> B, g: () -> B): B = g()
+
+        override fun <B : Any> RemoteData<E, A>.cata(
+                notAsked: () -> B,
+                loading: () -> B,
+                failure: (E) -> B,
+                success: (A) -> B): B = failure(error)
+
     }
 
     data class Success<E : Any, A : Any>(val value: A) : RemoteData<E, A>() {
-        override fun <B : Any> RemoteData<E, A>.cata(f: (A) -> B, g: () -> B): B = f(value)
+
+        override fun <B : Any> RemoteData<E, A>.cata(
+                notAsked: () -> B,
+                loading: () -> B,
+                failure: (E) -> B,
+                success: (A) -> B): B = success(value)
+
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,11 +74,11 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     // Bind
 
     @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <B : Any> bind(remoteData: (A) -> Bind<B>): Bind<B>
-            = bind(remoteData as? (A) -> RemoteData<E, B> ?: throw IllegalArgumentException("Bind must be RemoteData"))
+    override fun <B : Any> bind(f: (A) -> Bind<B>): Bind<B>
+            = bind(f as? (A) -> RemoteData<E, B> ?: throw IllegalArgumentException("Bind must be RemoteData"))
 
-    infix fun <B : Any> bind(remoteData: (A) -> RemoteData<E, B>): RemoteData<E, B>
-            = cata(remoteData, constant(NotAsked<E, B>()))
+    infix fun <B : Any> bind(f: (A) -> RemoteData<E, B>): RemoteData<E, B>
+            = cata(constant(NotAsked<E, B>()), constant(Loading<E, B>()), { Failure<E, B>(it) }, f)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API
@@ -65,10 +93,10 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
             c: RemoteData<E, C>): RemoteData<E, D> = c ap (b ap map(f))
 
     infix fun orElse(value: A): A
-            = cata(identity(), constant(value))
+            = cata(constant(value), constant(value), { value }, identity())
 
     infix fun getOrElse(f: () -> A): A
-            = cata(identity(), f)
+            = cata(f, f, { f() }, identity())
 
     infix fun <B : Any> andMap(wrappedFunction: RemoteData<E, (A) -> B>): RemoteData<E, B> {
         return when (wrappedFunction) {
