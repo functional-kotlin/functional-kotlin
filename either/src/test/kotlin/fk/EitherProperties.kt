@@ -3,6 +3,7 @@ package fk
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
 import com.pholser.junit.quickcheck.runner.JUnitQuickcheck
+import fk.algebra.ApplyLaws
 import fk.algebra.BindLaws
 import fk.algebra.FunctorLaws
 import org.junit.runner.RunWith
@@ -13,39 +14,41 @@ class EitherProperties {
     // Functor
 
     @Property
-    fun <X : Any> functorIdentity(
-            @When(satisfies = NOT_NULL) x: X) {
+    fun <A : Any> functorIdentity(
+            @When(satisfies = NOT_NULL) a: A) {
 
-        FunctorLaws.identity(of<X>(), x)
+        assert(FunctorLaws.functorIdentity(of(a)))
     }
 
     @Property
-    fun <X : Any, Y : Any, Z : Any> functorComposition(
-            @When(satisfies = NOT_NULL) x: X,
-            @When(satisfies = NOT_NULL) y: Y,
-            @When(satisfies = NOT_NULL) z: Z) {
+    fun <A : Any, B : Any, C : Any> functorComposition(
+            @When(satisfies = NOT_NULL) a: A,
+            @When(satisfies = NOT_NULL) b: B,
+            @When(satisfies = NOT_NULL) c: C) {
 
-        FunctorLaws.composition(of<X>(), x, { y }, { z })
+        assert(FunctorLaws.functorComposition(of(a), { b }, { c }))
     }
 
     // Apply
 
     @Property
-    fun <X : Any, Y : Any, Z : Any> applyComposition(
-            @When(satisfies = NOT_NULL) x: X,
-            @When(satisfies = NOT_NULL) y: Y,
-            @When(satisfies = NOT_NULL) z: Z) {
+    fun <A : Any, B : Any, C : Any> applyComposition(
+            @When(satisfies = NOT_NULL) a: A,
+            @When(satisfies = NOT_NULL) b: B,
+            @When(satisfies = NOT_NULL) c: C) {
 
-        // ApplyLaws.composition(of<X>(), x, { y }, { z })
+        assert(ApplyLaws.applyComposition(of(a), of({ _: A -> b }), of({ _: B -> c })))
     }
 
     // Bind
 
     @Property
-    fun <X : Any> bindAssociativity(
-            @When(satisfies = NOT_NULL) x: X) {
+    fun <A : Any, B : Any, C : Any> bindAssociativity(
+            @When(satisfies = NOT_NULL) a: A,
+            @When(satisfies = NOT_NULL) b: B,
+            @When(satisfies = NOT_NULL) c: C) {
 
-        BindLaws.associativity(of(), x)
+        assert(BindLaws.bindAssociativity(of(a), { of(b) }, { of(c) }))
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +57,7 @@ class EitherProperties {
 
         private const val NOT_NULL = "#_!=null"
 
-        private fun <B : Any> of() = { b: B -> Either.of<Any, B>(b) }
+        private fun <A : Any> of(a: A) = Either.of<Any, A>(a)
 
     }
 

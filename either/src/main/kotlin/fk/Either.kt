@@ -38,7 +38,7 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
     // Bind
 
     @Suppress("UNCHECKED_CAST")
-    override fun <C : Any> bind(f: (A) -> Bind<C>): Bind<C>
+    override fun <C : Any> bind(f: (A) -> Bind<C>): Monad<C>
             = bind(f as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Either"))
 
     infix fun <C : Any> bind(f: (A) -> Either<B, C>): Either<B, C>

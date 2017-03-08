@@ -1,27 +1,14 @@
 package fk.algebra
 
-import com.google.common.truth.Truth.assertThat
+import fk.andThen
+import fk.identity
 
 object FunctorLaws {
 
-    /**
-     * `u.map { a -> a }` is equivalent to `u`
-     */
-    fun <X : Any> identity(of: (X) -> Functor<X>, x: X) {
-        val a = of(x).map { x -> x }
-        val b = of(x)
+    fun <A : Any> functorIdentity(fa: Functor<A>)
+            = fa.map<A>(identity()) == fa
 
-        assertThat(a).isEqualTo(b)
-    }
-
-    /**
-     * `u.map { x -> f(g(x)) }` is equivalent to `u.map(g).map(f)`
-     */
-    fun <X : Any, Y : Any, Z : Any> composition(of: (X) -> Functor<X>, x: X, f: (X) -> Y, g: (Y) -> Z) {
-        val a = of(x).map { x -> g(f(x)) }
-        val b = of(x).map(f).map(g)
-
-        assertThat(a).isEqualTo(b)
-    }
+    fun <A : Any, B : Any, C : Any> functorComposition(fa: Functor<A>, f: (A) -> B, g: (B) -> C)
+            = fa.map(f).map(g) == fa.map(f andThen g)
 
 }

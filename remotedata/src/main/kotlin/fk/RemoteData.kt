@@ -74,7 +74,7 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     // Bind
 
     @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <B : Any> bind(f: (A) -> Bind<B>): Bind<B>
+    override fun <B : Any> bind(f: (A) -> Bind<B>): Monad<B>
             = bind(f as? (A) -> RemoteData<E, B> ?: throw IllegalArgumentException("Bind must be RemoteData"))
 
     infix fun <B : Any> bind(f: (A) -> RemoteData<E, B>): RemoteData<E, B>

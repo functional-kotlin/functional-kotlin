@@ -1,17 +1,8 @@
 package fk.algebra
 
-import com.google.common.truth.Truth
-
 object BindLaws {
 
-    /**
-     * `m.bind(f).bind(g)` is equivalent to `m.bind { x -> f(x).bind(g) }` (associativity)
-     */
-    fun <X : Any> associativity(of: (X) -> Bind<X>, x: X) {
-        val a = of(x).bind(of).bind(of)
-        val b = of(x).bind { x -> of(x).bind(of) }
-
-        Truth.assertThat(a).isEqualTo(b)
-    }
+    fun <A : Any, B : Any, C : Any> bindAssociativity(fa: Bind<A>, f: (A) -> Bind<B>, g: (B) -> Bind<C>)
+            = fa.bind(f).bind(g) == fa.bind { a -> f(a).bind(g) }
 
 }
