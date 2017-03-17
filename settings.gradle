@@ -4,5 +4,7 @@ include ':either'
 include ':lens'
 include ':maybe'
 include ':partial'
+include ':reader'
 include ':remotedata'
-
+include ':state'
+include ':writer'

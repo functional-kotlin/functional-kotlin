@@ -1,7 +1,5 @@
 package fk
 
-import fk.algebra.Apply
-import fk.algebra.Bind
 import fk.algebra.Monad
 
 sealed class RemoteData<E : Any, A : Any> : Monad<A> {
@@ -64,21 +62,21 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
 
     // Apply
 
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <B : Any> ap(remoteData: Apply<(A) -> B>): RemoteData<E, B>
-            = ap(remoteData as? RemoteData<E, (A) -> B> ?: throw IllegalArgumentException("Apply must be RemoteData"))
-
     infix fun <B : Any> ap(remoteData: RemoteData<E, (A) -> B>): RemoteData<E, B>
             = bind { a -> remoteData.map { it(a) } }
 
-    // Bind
+    @Suppress("UNCHECKED_CAST")
+    override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
+            = ap(monad as RemoteData<E, (A) -> B>)
 
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <B : Any> bind(f: (A) -> Bind<B>): Monad<B>
-            = bind(f as? (A) -> RemoteData<E, B> ?: throw IllegalArgumentException("Bind must be RemoteData"))
+    // Bind
 
     infix fun <B : Any> bind(f: (A) -> RemoteData<E, B>): RemoteData<E, B>
             = cata(constant(NotAsked<E, B>()), constant(Loading<E, B>()), { Failure<E, B>(it) }, f)
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <B : Any> bind(f: (A) -> Monad<B>): Monad<B>
+            = bind(f as (A) -> RemoteData<E, B>)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API

@@ -1,7 +1,5 @@
 package fk
 
-import fk.algebra.Apply
-import fk.algebra.Bind
 import fk.algebra.Monad
 
 sealed class Either<B : Any, A : Any> : Monad<A> {
@@ -28,21 +26,21 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     // Apply
 
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE", "UNCHECKED_CAST")
-    override fun <C : Any> ap(either: Apply<(A) -> C>): Either<B, C>
-            = ap(either as? Either<B, (A) -> C> ?: throw IllegalArgumentException("Apply must be Either"))
-
     infix fun <C : Any> ap(either: Either<B, (A) -> C>): Either<B, C>
-            = bind { a -> either.map { it(a) } }
+            = bind { a -> either.map { f -> f(a) } }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <C : Any> ap(monad: Monad<(A) -> C>): Monad<C>
+            = ap(monad as Either<B, (A) -> C>)
 
     // Bind
 
-    @Suppress("UNCHECKED_CAST")
-    override fun <C : Any> bind(f: (A) -> Bind<C>): Monad<C>
-            = bind(f as? (A) -> Either<B, C> ?: throw IllegalArgumentException("Bind must be Either"))
-
     infix fun <C : Any> bind(f: (A) -> Either<B, C>): Either<B, C>
-            = cata({ Left<B, C>(it) }, f)
+            = cata({ b -> Left<B, C>(b) }, f)
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <C : Any> bind(f: (A) -> Monad<C>): Monad<C>
+            = bind(f as (A) -> Either<B, C>)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     // API
@@ -51,7 +49,7 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     companion object {
 
-        fun <B : Any, A : Any> of(a: A): Either<B, A> = Either.Right(a)
+        fun <A : Any> of(a: A) = Either.Right<Any, A>(a)
 
     }
 

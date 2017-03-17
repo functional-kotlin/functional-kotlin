@@ -1,0 +1,5 @@
+package fk
+
+class WriterTest {
+
+}
