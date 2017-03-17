@@ -2,8 +2,15 @@ package fk.algebra
 
 interface Plus<A : Any> : Alt<A> {
 
-    override infix fun <B : Any> map(f: (A) -> B): Plus<B>
+    // Overloads
 
-    override infix fun alt(alt: Alt<A>): Plus<A>
+    infix fun alt(plus: Plus<A>): Plus<A>
+
+    // Overrides
+
+    override fun <B : Any> map(f: (A) -> B): Plus<B>
+
+    override fun alt(alt: Alt<A>): Alt<A>
+            = alt(alt as Plus<A>)
 
 }

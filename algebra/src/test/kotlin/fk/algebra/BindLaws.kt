@@ -1,8 +1,26 @@
 package fk.algebra
 
-object BindLaws {
+import com.pholser.junit.quickcheck.Property
+import com.pholser.junit.quickcheck.When
+import fk.Properties.NOT_NULL
 
-    fun <A : Any, B : Any, C : Any> bindAssociativity(fa: Bind<A>, f: (A) -> Bind<B>, g: (B) -> Bind<C>)
-            = fa.bind(f).bind(g) == fa.bind { a -> f(a).bind(g) }
+interface BindLaws : ApplyLaws {
+
+    override fun <A : Any> of(): (a: A) -> Bind<A>
+
+    @Property
+    fun <A : Any, B : Any, C : Any> bindAssociativity(
+            @When(satisfies = NOT_NULL) a: A,
+            @When(satisfies = NOT_NULL) b: B,
+            @When(satisfies = NOT_NULL) c: C) {
+
+        val of = of<A>()
+        val f = { a: A -> of<B>()(b) }
+        val g = { b: B -> of<C>()(c) }
+
+        assert(
+                of(a).bind(f).bind(g) == of(a).bind { a -> f(a).bind(g) }
+        )
+    }
 
 }
