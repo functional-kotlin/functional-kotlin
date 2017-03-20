@@ -10,7 +10,7 @@ interface AltLaws : FunctorLaws {
     override fun <A : Any> of(): (a: A) -> Alt<A>
 
     @Property
-    fun <A : Any> associativity(
+    fun <A : Any> altAssociativity(
             @When(satisfies = NOT_NULL) a: A) {
 
         val of = of<A>()
@@ -25,7 +25,7 @@ interface AltLaws : FunctorLaws {
     }
 
     @Property
-    fun <A : Any> distributivity(
+    fun <A : Any> altDistributivity(
             @When(satisfies = NOT_NULL) a: A) {
 
         val of = of<A>()

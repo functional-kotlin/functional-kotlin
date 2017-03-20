@@ -11,7 +11,7 @@ interface PlusLaws : AltLaws {
     override fun <A : Any> of(): (a: A) -> Plus<A>
 
     @Property
-    fun <A : Any> rightIdentity(
+    fun <A : Any> plusRightIdentity(
             @When(satisfies = NOT_NULL) a: A) {
 
         val of = of<A>()
@@ -24,7 +24,7 @@ interface PlusLaws : AltLaws {
     }
 
     @Property
-    fun <A : Any> leftIdentity(
+    fun <A : Any> plusLeftIdentity(
             @When(satisfies = NOT_NULL) a: A) {
 
         val of = of<A>()
@@ -37,7 +37,7 @@ interface PlusLaws : AltLaws {
     }
 
     @Property
-    fun <A : Any> annihilation(
+    fun <A : Any> plusAnnihilation(
             @When(satisfies = NOT_NULL) a: A) {
 
         val zero = zero<A>()
