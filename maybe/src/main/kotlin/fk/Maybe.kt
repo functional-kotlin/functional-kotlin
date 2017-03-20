@@ -38,7 +38,7 @@ sealed class Maybe<A : Any> : Monad<A> {
      * @param f A function which takes an A and returns a B
      */
     override fun <B : Any> map(f: (A) -> B): Maybe<B>
-            = cata({ a -> Some(f(a)) }, constant(None<B>()))
+            = cata({ a -> Some(f(a)) }, { None<B>() })
 
     // Apply
 
@@ -52,7 +52,7 @@ sealed class Maybe<A : Any> : Monad<A> {
 
 
     infix fun <B : Any> bind(maybe: (A) -> Maybe<B>): Maybe<B>
-            = cata(maybe, constant(None<B>()))
+            = cata(maybe, { None<B>() })
 
     @Suppress("UNCHECKED_CAST")
     override fun <B : Any> bind(f: (A) -> Monad<B>): Monad<B>
@@ -66,8 +66,8 @@ sealed class Maybe<A : Any> : Monad<A> {
         is Maybe.None -> null
     }
 
-    infix fun orElse(value: A): A
-            = cata(identity(), constant(value))
+    infix fun getOrElse(value: A): A
+            = getOrElse { value }
 
     infix fun getOrElse(f: () -> A): A
             = cata(identity(), f)

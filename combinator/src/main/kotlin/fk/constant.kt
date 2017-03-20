@@ -1,3 +1,7 @@
 package fk
 
-fun <A : Any> constant(a: A) = { a }
+/**
+ * K combinator
+ */
+fun <A : Any, B : Any> constant(): (A) -> ((B) -> A)
+        = { a -> { b -> a } }

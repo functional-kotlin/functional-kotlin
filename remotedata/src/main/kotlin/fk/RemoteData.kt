@@ -72,7 +72,7 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     // Bind
 
     infix fun <B : Any> bind(f: (A) -> RemoteData<E, B>): RemoteData<E, B>
-            = cata(constant(NotAsked<E, B>()), constant(Loading<E, B>()), { Failure<E, B>(it) }, f)
+            = cata({ NotAsked<E, B>() }, { Loading<E, B>() }, { Failure<E, B>(it) }, f)
 
     @Suppress("UNCHECKED_CAST")
     override fun <B : Any> bind(f: (A) -> Monad<B>): Monad<B>
@@ -91,7 +91,7 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
             c: RemoteData<E, C>): RemoteData<E, D> = c ap (b ap map(f))
 
     infix fun orElse(value: A): A
-            = cata(constant(value), constant(value), { value }, identity())
+            = cata({ value }, { value }, { value }, identity())
 
     infix fun getOrElse(f: () -> A): A
             = cata(f, f, { f() }, identity())
