@@ -43,13 +43,11 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
             = bind(f as (A) -> Either<B, C>)
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // API
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    companion object : Monad.Companion {
 
-    companion object {
-
-        fun <A : Any> of(a: A) = Either.Right<Any, A>(a)
+        override fun <A : Any> of(a: A): Either<Any, A>
+                = Either.Right<Any, A>(a)
 
     }
 

@@ -1,11 +1,11 @@
 package fk.algebra
 
-interface Profunctor<A : Any, B : Any> : Functor<A> {
+interface Profunctor<B : Any, C : Any> : Functor<B> {
 
-    fun <C : Any, D : Any> promap(fa: (C) -> A, fb: (B) -> D): Profunctor<C, D>
+    fun <A : Any, D : Any> promap(fa: (A) -> B, fb: (C) -> D): Profunctor<A, D>
 
     // Overrides
 
-    override fun <C : Any> map(f: (A) -> C): Profunctor<C, B>
+    override fun <A : Any> map(f: (B) -> A): Profunctor<A, C>
 
 }

@@ -13,4 +13,12 @@ interface Applicative<A : Any> : Apply<A> {
     override fun <B : Any> ap(apply: Apply<(A) -> B>): Apply<B>
             = ap(apply as Applicative<(A) -> B>)
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    interface Companion {
+
+        fun <A : Any> of(a: A): Applicative<A>
+
+    }
+
 }

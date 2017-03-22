@@ -1,5 +1,6 @@
 package fk
 
+import fk.algebra.Applicative
 import fk.algebra.Monad
 
 sealed class Maybe<A : Any> : Monad<A> {
@@ -74,9 +75,10 @@ sealed class Maybe<A : Any> : Monad<A> {
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    companion object {
+    companion object : Applicative.Companion {
 
-        fun <A : Any> of(a: A): Maybe<A> = Maybe.Some(a)
+        override fun <A : Any> of(a: A): Maybe<A>
+                = Maybe.Some(a)
 
     }
 

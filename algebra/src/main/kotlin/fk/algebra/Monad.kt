@@ -24,4 +24,12 @@ interface Monad<A : Any> : Applicative<A>, Bind<A> {
     override fun <B : Any> bind(f: (A) -> Bind<B>): Bind<B>
             = bind(f as (A) -> Monad<B>)
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    interface Companion : Applicative.Companion {
+
+        override fun <A : Any> of(a: A): Monad<A>
+
+    }
+
 }

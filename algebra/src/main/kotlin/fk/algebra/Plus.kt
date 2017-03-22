@@ -13,4 +13,12 @@ interface Plus<A : Any> : Alt<A> {
     override fun alt(alt: Alt<A>): Alt<A>
             = alt(alt as Plus<A>)
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    interface Companion {
+
+        fun <A : Any> zero(): Plus<A>
+
+    }
+
 }

@@ -96,4 +96,13 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     infix fun getOrElse(f: () -> A): A
             = cata(f, f, { f() }, identity())
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    companion object : Monad.Companion {
+
+        override fun <A : Any> of(a: A): RemoteData<Any, A>
+                = RemoteData.Success<Any, A>(a)
+
+    }
+
 }

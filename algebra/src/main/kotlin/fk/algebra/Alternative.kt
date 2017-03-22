@@ -18,4 +18,14 @@ interface Alternative<A : Any> : Plus<A>, Applicative<A> {
     override fun <B : Any> ap(apply: Apply<(A) -> B>): Apply<B>
             = ap(apply as Alternative<(A) -> B>)
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    interface Companion {
+
+        fun <A : Any> zero(): Alternative<A>
+
+        fun <A : Any> of(a: A): Alternative<A>
+
+    }
+
 }

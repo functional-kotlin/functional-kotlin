@@ -1,11 +1,11 @@
 package fk.algebra
 
-interface Bifunctor<A : Any, B : Any> : Functor<A> {
+interface Bifunctor<A : Any, C : Any> : Functor<A> {
 
-    fun <C : Any, D : Any> bimap(fa: (A) -> C, fb: (B) -> D): Bifunctor<C, D>
+    fun <B : Any, D : Any> bimap(fa: (A) -> B, fb: (C) -> D): Bifunctor<B, D>
 
     // Overrides
 
-    override fun <C : Any> map(f: (A) -> C): Bifunctor<C, B>
+    override fun <B : Any> map(f: (A) -> B): Bifunctor<B, C>
 
 }
