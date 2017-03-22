@@ -29,7 +29,6 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
     infix fun <C : Any> ap(either: Either<B, (A) -> C>): Either<B, C>
             = bind { a -> either.map { f -> f(a) } }
 
-    @Suppress("UNCHECKED_CAST")
     override fun <C : Any> ap(monad: Monad<(A) -> C>): Monad<C>
             = ap(monad as Either<B, (A) -> C>)
 
@@ -38,7 +37,6 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
     infix fun <C : Any> bind(f: (A) -> Either<B, C>): Either<B, C>
             = cata({ b -> Left<B, C>(b) }, f)
 
-    @Suppress("UNCHECKED_CAST")
     override fun <C : Any> bind(f: (A) -> Monad<C>): Monad<C>
             = bind(f as (A) -> Either<B, C>)
 

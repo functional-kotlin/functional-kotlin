@@ -65,7 +65,6 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     infix fun <B : Any> ap(remoteData: RemoteData<E, (A) -> B>): RemoteData<E, B>
             = bind { a -> remoteData.map { it(a) } }
 
-    @Suppress("UNCHECKED_CAST")
     override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
             = ap(monad as RemoteData<E, (A) -> B>)
 
@@ -74,7 +73,6 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
     infix fun <B : Any> bind(f: (A) -> RemoteData<E, B>): RemoteData<E, B>
             = cata({ NotAsked<E, B>() }, { Loading<E, B>() }, { Failure<E, B>(it) }, f)
 
-    @Suppress("UNCHECKED_CAST")
     override fun <B : Any> bind(f: (A) -> Monad<B>): Monad<B>
             = bind(f as (A) -> RemoteData<E, B>)
 

@@ -55,7 +55,6 @@ sealed class Maybe<A : Any> : Monad<A> {
     infix fun <B : Any> bind(maybe: (A) -> Maybe<B>): Maybe<B>
             = cata(maybe, { None<B>() })
 
-    @Suppress("UNCHECKED_CAST")
     override fun <B : Any> bind(f: (A) -> Monad<B>): Monad<B>
             = bind(f as (A) -> Maybe<B>)
 
