@@ -90,7 +90,7 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
             b: RemoteData<E, B>,
             c: RemoteData<E, C>): RemoteData<E, D> = c ap (b ap map(f))
 
-    infix fun orElse(value: A): A
+    infix fun getOrElse(value: A): A
             = cata({ value }, { value }, { value }, identity())
 
     infix fun getOrElse(f: () -> A): A
