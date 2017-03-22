@@ -21,7 +21,7 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     // Functor
 
-    override infix fun <C : Any> map(f: (A) -> C): Either<B, C>
+    override fun <C : Any> map(f: (A) -> C): Either<B, C>
             = bind { a -> Right<B, C>(f(a)) }
 
     // Apply

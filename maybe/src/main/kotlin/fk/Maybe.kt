@@ -33,11 +33,6 @@ sealed class Maybe<A : Any> : Monad<A> {
 
     // Functor
 
-    /**
-     * Transforms a Maybe<A> to a Maybe<B>
-     *
-     * @param f A function which takes an A and returns a B
-     */
     override fun <B : Any> map(f: (A) -> B): Maybe<B>
             = cata({ a -> Some(f(a)) }, { None<B>() })
 
