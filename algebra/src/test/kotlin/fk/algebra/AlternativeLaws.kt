@@ -11,16 +11,19 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
     override fun <A : Any> zero(): () -> Alternative<A>
 
     @Property
-    fun <A : Any> alternativeDistributivity(
-            @When(satisfies = NOT_NULL) a: A) {
+    fun <A : Any, B : Any> alternativeDistributivity(
+            @When(satisfies = NOT_NULL) a: A,
+            @When(satisfies = NOT_NULL) b: B) {
 
-        val of = of<A>()
-        val x = of(a)
-        val f = of(a)
+        val ofA = of<A>()
+        val ofAB = of<(A) -> B>()
+        val x = ofA(a)
+        val f = ofAB({ b })
+        val g = ofAB({ b })
 
-//        assert(
-//                x.ap(f.alt(g)) == x.ap(f).alt(x.ap(g))
-//        )
+        assert(
+                x.ap(f.alt(g)) == x.ap(f).alt(x.ap(g))
+        )
     }
 
     @Property
