@@ -2,7 +2,7 @@ package fk.algebra
 
 interface Apply<A : Any> : Functor<A> {
 
-    infix fun <B : Any> ap(apply: Apply<(A) -> B>): Apply<B>
+    infix fun <B : Any> apply(apply: Apply<(A) -> B>): Apply<B>
 
     // Overrides
 

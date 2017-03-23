@@ -26,11 +26,11 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
 
     // Apply
 
-    infix fun <C : Any> ap(either: Either<B, (A) -> C>): Either<B, C>
+    infix fun <C : Any> apply(either: Either<B, (A) -> C>): Either<B, C>
             = bind { a -> either.map { f -> f(a) } }
 
-    override fun <C : Any> ap(monad: Monad<(A) -> C>): Monad<C>
-            = ap(monad as Either<B, (A) -> C>)
+    override fun <C : Any> apply(monad: Monad<(A) -> C>): Monad<C>
+            = apply(monad as Either<B, (A) -> C>)
 
     // Bind
 

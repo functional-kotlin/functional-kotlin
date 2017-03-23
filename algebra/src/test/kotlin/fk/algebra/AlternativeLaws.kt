@@ -11,6 +11,17 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
     override fun <A : Any> zero(): () -> Alternative<A>
 
     @Property
+    fun <A : Any, B : Any> alternativeRightAbsorption(
+            @When(satisfies = NOT_NULL) b: B) {
+
+        val ff = of<(A) -> B>()({ b })
+
+//        assert(
+//                (ff apply zero<A>()) == zero<B>()
+//        )
+    }
+
+    @Property
     fun <A : Any, B : Any> alternativeDistributivity(
             @When(satisfies = NOT_NULL) a: A,
             @When(satisfies = NOT_NULL) b: B) {
@@ -22,7 +33,7 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
         val g = ofAB({ b })
 
         assert(
-                x.ap(f.alt(g)) == x.ap(f).alt(x.ap(g))
+                x apply (f.alt(g)) == x.apply(f).alt(x.apply(g))
         )
     }
 
@@ -34,7 +45,7 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
         val zero = zero<(A) -> A>()
 
         assert(
-                of(a).ap(zero()) == zero()
+                of(a).apply(zero()) == zero()
         )
     }
 

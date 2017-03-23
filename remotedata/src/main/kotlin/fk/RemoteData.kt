@@ -62,11 +62,11 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
 
     // Apply
 
-    infix fun <B : Any> ap(remoteData: RemoteData<E, (A) -> B>): RemoteData<E, B>
+    infix fun <B : Any> apply(remoteData: RemoteData<E, (A) -> B>): RemoteData<E, B>
             = bind { a -> remoteData.map { it(a) } }
 
-    override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
-            = ap(monad as RemoteData<E, (A) -> B>)
+    override fun <B : Any> apply(monad: Monad<(A) -> B>): Monad<B>
+            = apply(monad as RemoteData<E, (A) -> B>)
 
     // Bind
 
@@ -81,12 +81,12 @@ sealed class RemoteData<E : Any, A : Any> : Monad<A> {
 
     fun <B : Any, C : Any> map2(
             f: (A) -> (B) -> C,
-            b: RemoteData<E, B>): RemoteData<E, C> = b ap map(f)
+            b: RemoteData<E, B>): RemoteData<E, C> = b apply map(f)
 
     fun <B : Any, C : Any, D : Any> map3(
             f: (A) -> (B) -> (C) -> D,
             b: RemoteData<E, B>,
-            c: RemoteData<E, C>): RemoteData<E, D> = c ap (b ap map(f))
+            c: RemoteData<E, C>): RemoteData<E, D> = c apply (b apply map(f))
 
     infix fun getOrElse(value: A): A
             = cata({ value }, { value }, { value }, identity())

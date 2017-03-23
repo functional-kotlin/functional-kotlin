@@ -19,7 +19,7 @@ interface ApplyLaws : FunctorLaws {
         val g = { b: B -> of<C>()(c) }
 
 //        assert(
-//                of(a).ap(f).ap(g) == of(a).ap(f.ap(g.map(compose())))
+//                of(a).apply(f).apply(g) == of(a).apply(f.apply(g.map(compose())))
 //        )
     }
 

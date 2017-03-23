@@ -38,11 +38,11 @@ sealed class Maybe<A : Any> : Monad<A> {
 
     // Apply
 
-    infix fun <B : Any> ap(maybe: Maybe<(A) -> B>): Maybe<B>
+    infix fun <B : Any> apply(maybe: Maybe<(A) -> B>): Maybe<B>
             = bind { a -> maybe.map { f -> f(a) } }
 
-    override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
-            = ap(monad as Maybe<(A) -> B>)
+    override fun <B : Any> apply(monad: Monad<(A) -> B>): Monad<B>
+            = apply(monad as Maybe<(A) -> B>)
 
     // Bind
 

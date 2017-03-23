@@ -15,12 +15,12 @@ class Reader<R : Any, A : Any>(
 
     // Apply
 
-    fun <B : Any> ap(reader: Reader<R, (A) -> B>): Reader<R, B>
+    fun <B : Any> apply(reader: Reader<R, (A) -> B>): Reader<R, B>
             = bind { a -> reader.map { f -> f(a) } }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
-            = ap(monad as Reader<R, (A) -> B>)
+    override fun <B : Any> apply(monad: Monad<(A) -> B>): Monad<B>
+            = apply(monad as Reader<R, (A) -> B>)
 
     // Bind
 

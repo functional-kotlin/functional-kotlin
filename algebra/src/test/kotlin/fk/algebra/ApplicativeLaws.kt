@@ -4,7 +4,6 @@ import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
 import fk.Properties.NOT_NULL
 import fk.identity
-import fk.thrush
 
 interface ApplicativeLaws : ApplyLaws {
 
@@ -15,7 +14,7 @@ interface ApplicativeLaws : ApplyLaws {
 
         val ofA = of<A>()
         val ofAA = of<(A) -> A>()
-        val x = ofA(a).ap(ofAA(identity()))
+        val x = ofA(a).apply(ofAA(identity()))
         val y = ofA(a)
 
         assert(
@@ -28,7 +27,7 @@ interface ApplicativeLaws : ApplyLaws {
 
         val ofA = of<A>()
         val ofAA = of<(A) -> A>()
-        val x = ofA(a).ap(ofAA(identity()))
+        val x = ofA(a).apply(ofAA(identity()))
         val y = ofAA({ a })
 
         assert(
@@ -42,8 +41,8 @@ interface ApplicativeLaws : ApplyLaws {
 //        val ofA = of<A>()
 //        val ofAA = of<(A) -> A>()
 //        val u = ofAA(identity())
-//        val x = ofA(a).ap(u)
-//        val y = u.ap(ofAA(thrush()(a)))
+//        val x = ofA(a).apply(u)
+//        val y = u.apply(ofAA(thrush()(a)))
 //
 //        assert(
 //                x == y

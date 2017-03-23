@@ -18,12 +18,12 @@ class Writer<W : Monoid<*>, A : Any>(
 
     // Apply
 
-    fun <B : Any> ap(writer: Writer<W, (A) -> B>): Writer<W, B>
+    fun <B : Any> apply(writer: Writer<W, (A) -> B>): Writer<W, B>
             = bind { a -> writer.map { f -> f(a) } }
 
     @Suppress("UNCHECKED_CAST")
-    override fun <B : Any> ap(monad: Monad<(A) -> B>): Monad<B>
-            = ap(monad as Writer<W, (A) -> B>)
+    override fun <B : Any> apply(monad: Monad<(A) -> B>): Monad<B>
+            = apply(monad as Writer<W, (A) -> B>)
 
     // Bind
 
@@ -31,7 +31,7 @@ class Writer<W : Monoid<*>, A : Any>(
         return Writer<W, B> {
             val result = run()
             val t = f(result.first).run()
-            Pair(t.first, (result.second + t.second as Nothing)) as Pair<B, W>
+            Pair(t.first, (result.second concat t.second as Nothing)) as Pair<B, W>
         }
     }
 
