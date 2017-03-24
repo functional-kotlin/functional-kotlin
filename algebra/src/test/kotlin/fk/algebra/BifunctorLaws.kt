@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 import fk.compose
 import fk.identity
 
@@ -19,9 +20,7 @@ interface BifunctorLaws {
         val x = of(a).bimap(identity<A>(), identity<B>())
         val y = of(a)
 
-        assert(
-                x == y
-        )
+        x assertEqual y
     }
 
     @Property
@@ -33,9 +32,7 @@ interface BifunctorLaws {
         val x = of(a).bimap(identity<A>() compose identity<A>(), identity<B>() compose identity<B>())
         val y = of(a).bimap(identity<A>(), identity<B>()).bimap(identity<A>(), identity<B>())
 
-        assert(
-                x == y
-        )
+        x assertEqual y
     }
 
 }

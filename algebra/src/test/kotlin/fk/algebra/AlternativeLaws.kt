@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 
 interface AlternativeLaws : PlusLaws, ApplicativeLaws {
 
@@ -32,9 +33,7 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
         val f = ofAB({ b })
         val g = ofAB({ b })
 
-        assert(
-                x apply (f.alt(g)) == x.apply(f).alt(x.apply(g))
-        )
+        x apply (f.alt(g)) assertEqual x.apply(f).alt(x.apply(g))
     }
 
     @Property
@@ -44,9 +43,7 @@ interface AlternativeLaws : PlusLaws, ApplicativeLaws {
         val of = of<A>()
         val zero = zero<(A) -> A>()
 
-        assert(
-                of(a).apply(zero()) == zero()
-        )
+        of(a).apply(zero()) assertEqual zero()
     }
 
 }

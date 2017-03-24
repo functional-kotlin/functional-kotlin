@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 import fk.identity
 
 interface ApplicativeLaws : ApplyLaws {
@@ -17,9 +18,7 @@ interface ApplicativeLaws : ApplyLaws {
         val x = ofA(a).apply(ofAA(identity()))
         val y = ofA(a)
 
-        assert(
-                x == y
-        )
+        x assertEqual y
     }
 
     @Property fun <A : Any> applyHomomorphism(
@@ -30,9 +29,7 @@ interface ApplicativeLaws : ApplyLaws {
         val x = ofA(a).apply(ofAA(identity()))
         val y = ofAA({ a })
 
-        assert(
-                x == y
-        )
+        x assertEqual y
     }
 
 //    @Property fun <A : Any> applyInterchange(

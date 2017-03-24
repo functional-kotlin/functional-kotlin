@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 
 interface PlusLaws : AltLaws {
 
@@ -12,40 +13,17 @@ interface PlusLaws : AltLaws {
 
     @Property
     fun <A : Any> plusRightIdentity(
-            @When(satisfies = NOT_NULL) a: A) {
-
-        val of = of<A>()
-        val zero = zero<A>()
-        val x = of(a)
-
-        assert(
-                zero().alt(x) == x
-        )
-    }
+            @When(satisfies = NOT_NULL) a: A)
+            = zero<A>()().alt(of<A>()(a)) assertEqual of<A>()(a)
 
     @Property
     fun <A : Any> plusLeftIdentity(
-            @When(satisfies = NOT_NULL) a: A) {
-
-        val of = of<A>()
-        val zero = zero<A>()
-        val x = of(a)
-
-        assert(
-                x.alt(zero()) == x
-        )
-    }
+            @When(satisfies = NOT_NULL) a: A)
+            = of<A>()(a).alt(zero<A>()()) assertEqual of<A>()(a)
 
     @Property
     fun <A : Any> plusAnnihilation(
-            @When(satisfies = NOT_NULL) a: A) {
-
-        val zero = zero<A>()
-        val f = { a: A -> a }
-
-        assert(
-                zero().map(f) == zero()
-        )
-    }
+            @When(satisfies = NOT_NULL) a: A)
+            = zero<A>()().map { a } assertEqual zero<A>()()
 
 }

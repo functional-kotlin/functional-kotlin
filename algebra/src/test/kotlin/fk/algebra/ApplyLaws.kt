@@ -2,7 +2,7 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
 
 interface ApplyLaws : FunctorLaws {
 

@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 import fk.andThen
 import fk.identity
 
@@ -12,14 +13,8 @@ interface FunctorLaws {
 
     @Property
     fun <A : Any> functorIdentity(
-            @When(satisfies = NOT_NULL) a: A) {
-
-        val of = of<A>()
-
-        assert(
-                of(a).map<A>(identity()) == of(a)
-        )
-    }
+            @When(satisfies = NOT_NULL) a: A)
+            = of<A>()(a).map<A>(identity()) assertEqual of<A>()(a)
 
     fun <A : Any, B : Any, C : Any> functorComposition(
             @When(satisfies = NOT_NULL) a: A,
@@ -30,9 +25,7 @@ interface FunctorLaws {
         val f = { a: A -> b }
         val g = { b: B -> c }
 
-        assert(
-                of(a).map(f).map(g) == of(a).map(f andThen g)
-        )
+        of(a).map(f).map(g) assertEqual of(a).map(f andThen g)
     }
 
 }

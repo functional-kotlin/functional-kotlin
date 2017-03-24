@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 
 interface BindLaws : ApplyLaws {
 
@@ -14,13 +15,10 @@ interface BindLaws : ApplyLaws {
             @When(satisfies = NOT_NULL) b: B,
             @When(satisfies = NOT_NULL) c: C) {
 
-        val of = of<A>()
         val f = { a: A -> of<B>()(b) }
         val g = { b: B -> of<C>()(c) }
 
-        assert(
-                of(a).bind(f).bind(g) == of(a).bind { a -> f(a).bind(g) }
-        )
+        of<A>()(a).bind(f).bind(g) assertEqual of<A>()(a).bind { a -> f(a).bind(g) }
     }
 
 }

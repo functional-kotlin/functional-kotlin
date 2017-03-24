@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 import fk.identity
 
 interface AltLaws : FunctorLaws {
@@ -19,9 +20,7 @@ interface AltLaws : FunctorLaws {
         val y = of(a)
         val z = of(a)
 
-        assert(
-                x.alt(y).alt(z) == x.alt(y.alt(z))
-        )
+        x.alt(y).alt(z) assertEqual x.alt(y.alt(z))
     }
 
     @Property
@@ -34,9 +33,7 @@ interface AltLaws : FunctorLaws {
         val y = of(a)
         val f = identity<A>()
 
-        assert(
-                x.alt(y).map(f) == x.map(f).alt(y.map(f))
-        )
+        x.alt(y).map(f) assertEqual x.map(f).alt(y.map(f))
     }
 
 }

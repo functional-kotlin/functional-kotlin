@@ -2,7 +2,8 @@ package fk.algebra
 
 import com.pholser.junit.quickcheck.Property
 import com.pholser.junit.quickcheck.When
-import fk.Properties.NOT_NULL
+import fk.Laws.NOT_NULL
+import fk.Laws.assertEqual
 
 interface MonoidLaws : SemigroupLaws {
 
@@ -12,27 +13,12 @@ interface MonoidLaws : SemigroupLaws {
 
     @Property
     fun <M : Monoid<A>, A : Any> monoidRightIdentity(
-            @When(satisfies = NOT_NULL) m: M) {
-
-        val zero = zero<A>()
-
-        assert(
-                m == m.concat(zero())
-        )
-    }
+            @When(satisfies = NOT_NULL) m: M)
+            = m assertEqual m.concat(zero<A>()())
 
     @Property
     fun <A : Any> monoidLeftIdentity(
-            @When(satisfies = NOT_NULL) a: A) {
-
-        val of = of<A>()
-        val zero = zero<A>()
-
-        val m = of(a)
-
-        assert(
-                m == zero().concat(m)
-        )
-    }
+            @When(satisfies = NOT_NULL) a: A)
+            = of<A>()(a) assertEqual zero<A>()().concat(of<A>()(a))
 
 }
