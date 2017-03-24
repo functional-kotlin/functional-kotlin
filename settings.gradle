@@ -1,6 +1,7 @@
 include ':algebra'
 include ':combinator'
 include ':either'
+include ':identity'
 include ':lens'
 include ':maybe'
 include ':partial'
