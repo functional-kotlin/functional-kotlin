@@ -65,6 +65,14 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
     fun <C : Any, D : Any> bindBoth(fB: (B) -> Either<D, C>, fA: (A) -> Either<D, C>): Either<D, C>
             = cata(fB, fA)
 
+    // Unwraping
+
+    fun fromLeft(default: () -> B): B
+            = cata({ it }, { default() })
+
+    fun fromRight(default: () -> A): A
+            = cata({ default() }, { it })
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     companion object : Monad.Companion {
