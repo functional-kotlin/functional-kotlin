@@ -51,8 +51,8 @@ sealed class Either<B : Any, A : Any> : Monad<A> {
     fun <C : Any> mapRight(f: (A) -> C): Either<B, C>
             = map(f)
 
-    fun <C : Any, D : Any> mapBoth(fB: (B) -> D, fA: (A) -> C)
-            = cata(fB, fA)
+    fun <C : Any, D : Any> mapBoth(fB: (B) -> D, fA: (A) -> C): Either<D, C>
+            = cata({ b -> Left<D, C>(fB(b)) }, { a -> Right<D, C>(fA(a)) })
 
     // Binding
 
